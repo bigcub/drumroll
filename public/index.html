@@ -876,29 +876,32 @@
 
     try { scheduleDrumroll(rollMs / 1000, isFinale); } catch (e) {}
 
+    // pick the winner up-front so the visual shuffle can't disagree with it
+    const winner = remaining[Math.floor(Math.random() * remaining.length)];
+
     // visual: shuffle through names rapidly. In finale there's only one,
     // so shuffle through the full original list for show.
     const shufflePool = isFinale ? items.map(i => i.name) : remaining.map(i => i.name);
     pickDisplay.classList.remove('placeholder', 'reveal', 'finale');
     pickDisplay.classList.add('rolling');
-    let elapsed = 0;
+    const rollStart = performance.now();
+    let stepActive = true;
     const step = () => {
+      if (!stepActive) return;
+      const now = performance.now();
+      const realElapsed = now - rollStart;
+      if (realElapsed >= rollMs - 120) return;
       const idx = Math.floor(Math.random() * shufflePool.length);
       pickDisplay.textContent = shufflePool[idx];
-      elapsed += 90;
-      if (elapsed < rollMs - 120) {
-        const p = elapsed / rollMs;
-        // accelerate towards the end then slow ever so slightly
-        const delay = 55 + (1 - p) * 80;
-        setTimeout(step, delay);
-      }
+      const p = realElapsed / rollMs;
+      const delay = 55 + (1 - p) * 80;
+      setTimeout(step, delay);
     };
     step();
 
-    // final pick
+    // final pick — winner was chosen above; commit and reveal now
     setTimeout(() => {
-      const stillRemaining = items.filter(i => i.pickedAt == null);
-      const winner = stillRemaining[Math.floor(Math.random() * stillRemaining.length)];
+      stepActive = false;
       winner.pickedAt = Date.now();
       pickDisplay.classList.remove('rolling');
       pickDisplay.textContent = winner.name;
