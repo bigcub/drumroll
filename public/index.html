@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Drumroll</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f3f0;
+    --surface: #ffffff;
+    --surface-2: #fffaf3;
+    --text: #28261f;
+    --text-mid: #5a574f;
+    --text-muted: #9b9890;
+    --border: rgba(0,0,0,0.07);
+    --border-mid: rgba(0,0,0,0.12);
+    --accent: #5ac47a;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 20px 48px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #1a1a1e;
+    --surface: #242428;
+    --surface-2: #2a2722;
+    --text: #e8e6e1;
+    --text-mid: #a8a5a0;
+    --text-muted: #6b6965;
+    --border: rgba(255,255,255,0.08);
+    --border-mid: rgba(255,255,255,0.14);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.25);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.5), 0 20px 48px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    background: rgba(245, 243, 240, 0.88);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border-bottom: 1px solid var(--border);
+  }
+  [data-theme="dark"] header { background: rgba(26, 26, 30, 0.85); }
+  .logo {
+    font-family: 'Lora', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-dot {
+    width: 9px; height: 9px; border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(90,196,122,0.18);
+  }
+  .header-actions { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    background: transparent; border: none;
+    width: 36px; height: 36px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1rem;
+    color: var(--text-mid);
+    transition: background 0.15s ease;
+  }
+  .icon-btn:hover { background: rgba(0,0,0,0.05); }
+  [data-theme="dark"] .icon-btn:hover { background: rgba(255,255,255,0.06); }
+
+  /* ---------- main layout ---------- */
+  main {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 28px;
+  }
+
+  /* ---------- sidebar (list) ---------- */
+  .panel {
+    background: var(--surface);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    padding: 24px 24px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel::after {
+    content: ""; position: absolute; top: -40px; right: -40px;
+    width: 110px; height: 110px; border-radius: 999px;
+    background: rgba(255,255,255,0.25); pointer-events: none;
+  }
+  [data-theme="dark"] .panel::after { background: rgba(255,255,255,0.04); }
+
+  .eyebrow {
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 10px;
+  }
+  .panel h2 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+  }
+
+  .add-row {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  input[type=text] {
+    flex: 1;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: 10px;
+    font: inherit;
+    font-size: 0.92rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  input[type=text]:focus {
+    outline: none;
+    background: var(--surface);
+    border-color: var(--text-mid);
+  }
+  .btn {
+    font: inherit;
+    font-size: 0.865rem;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--text); color: var(--bg);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary:disabled {
+    opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none;
+  }
+  .btn-outline {
+    background: transparent;
+    border-color: var(--border-mid);
+    color: var(--text);
+  }
+  .btn-outline:hover {
+    background: var(--surface);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    background: transparent; color: var(--text-mid); border-color: transparent;
+  }
+  .btn-ghost:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+  [data-theme="dark"] .btn-ghost:hover { background: rgba(255,255,255,0.06); }
+
+  ul.items {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 6px;
+    max-height: 50vh; overflow-y: auto;
+    padding-right: 4px;
+  }
+  ul.items li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.94rem;
+    transition: opacity 0.2s ease, background 0.15s ease;
+  }
+  ul.items li.picked {
+    opacity: 0.45;
+    text-decoration: line-through;
+    text-decoration-color: var(--text-muted);
+  }
+  ul.items li .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  ul.items li .order-num {
+    font-family: 'Lora', serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    min-width: 18px;
+  }
+  ul.items li .remove {
+    opacity: 0;
+    background: transparent; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 1.1rem; line-height: 1;
+    padding: 2px 6px; border-radius: 6px;
+    transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  ul.items li:hover .remove { opacity: 1; }
+  ul.items li .remove:hover { background: rgba(0,0,0,0.06); color: var(--text); }
+  [data-theme="dark"] ul.items li .remove:hover { background: rgba(255,255,255,0.08); }
+
+  .panel-footer {
+    margin-top: 16px;
+    display: flex; gap: 8px; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-muted);
+  }
+
+  /* ---------- stage ---------- */
+  .stage {
+    background: var(--surface);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    padding: 40px;
+    min-height: 540px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .stage::after {
+    content: ""; position: absolute; top: -40px; right: -40px;
+    width: 110px; height: 110px; border-radius: 999px;
+    background: rgba(255,255,255,0.25); pointer-events: none;
+  }
+  [data-theme="dark"] .stage::after { background: rgba(255,255,255,0.04); }
+
+  .stage-eyebrow {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .pick-display {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 8vw, 6.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    max-width: 100%;
+    word-break: break-word;
+    transition: transform 0.4s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.3s ease;
+    min-height: 1.2em;
+  }
+  .pick-display.placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  }
+  .pick-display.rolling {
+    animation: rollShake 0.08s ease-in-out infinite alternate;
+  }
+  @keyframes rollShake {
+    from { transform: translateX(-2px) translateY(-1px) rotate(-0.4deg); }
+    to   { transform: translateX(2px) translateY(1px) rotate(0.4deg); }
+  }
+  .pick-display.reveal {
+    animation: revealPop 0.6s cubic-bezier(0.34, 1.5, 0.64, 1);
+  }
+  @keyframes revealPop {
+    0%   { transform: scale(0.6); opacity: 0; }
+    60%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* finale */
+  .pick-display.finale {
+    background: linear-gradient(135deg, #c9a24a 0%, #f3c969 40%, #fff4cf 55%, #f3c969 70%, #b88a2f 100%);
+    background-size: 220% 220%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: none;
+    animation: revealPop 0.7s cubic-bezier(0.34, 1.5, 0.64, 1), shimmer 3.2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 18px rgba(243, 201, 105, 0.35));
+  }
+  @keyframes shimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .stage.finale-stage {
+    background: radial-gradient(circle at 50% 40%, rgba(243, 201, 105, 0.18) 0%, transparent 70%), var(--surface);
+  }
+  [data-theme="dark"] .stage.finale-stage {
+    background: radial-gradient(circle at 50% 40%, rgba(243, 201, 105, 0.12) 0%, transparent 70%), var(--surface);
+  }
+  .stage-eyebrow.finale-eyebrow {
+    color: #b88a2f;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  [data-theme="dark"] .stage-eyebrow.finale-eyebrow { color: #e6c068; }
+
+  /* sparkles */
+  .sparkles {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .sparkles span {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: radial-gradient(circle, #fff4cf 0%, #f3c969 50%, transparent 70%);
+    border-radius: 999px;
+    animation: sparkle 1.8s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes sparkle {
+    0%, 100% { transform: scale(0); opacity: 0; }
+    50%      { transform: scale(1.6); opacity: 1; }
+  }
+
+  .stage-meta {
+    margin-top: 22px;
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    min-height: 1.4em;
+  }
+  .stage-actions {
+    margin-top: 28px;
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  }
+  .btn-pick {
+    font-size: 1rem;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: var(--text); color: var(--bg);
+    border: none; cursor: pointer; font-weight: 500;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-pick:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .btn-pick:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* confetti */
+  .confetti {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: hidden;
+  }
+  .confetti span {
+    position: absolute; top: -10px;
+    width: 8px; height: 12px;
+    border-radius: 2px;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(640px) rotate(720deg); opacity: 0; }
+  }
+
+  /* mobile */
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; padding: 20px 16px 60px; gap: 18px; }
+    header { padding: 0 20px; }
+    .stage { min-height: 380px; padding: 30px 22px; }
+    ul.items { max-height: 30vh; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-dot"></span>
+      Drumroll
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">☀️</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" aria-label="Items">
+      <div class="eyebrow">In the hat</div>
+      <h2>Your list</h2>
+      <form class="add-row" id="add-form" autocomplete="off">
+        <input type="text" id="add-input" placeholder="Add a name or item…" maxlength="80" />
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+      <ul class="items" id="items-list"></ul>
+      <div class="panel-footer">
+        <span id="counts">0 in hat · 0 picked</span>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-ghost" id="reset-btn" title="Reset all picks">Reset</button>
+          <button class="btn btn-ghost" id="clear-btn" title="Remove all items">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stage" aria-label="Picker" id="stage">
+      <div class="confetti" id="confetti"></div>
+      <div class="sparkles" id="sparkles"></div>
+      <div class="stage-eyebrow" id="stage-eyebrow">Pick from the hat</div>
+      <div class="pick-display placeholder" id="pick-display">Add some items, then pick →</div>
+      <div class="stage-meta" id="stage-meta"></div>
+      <div class="stage-actions">
+        <button class="btn-pick" id="pick-btn" disabled>🥁 Pick next</button>
+      </div>
+    </section>
+  </main>
+
+<script>
+(function () {
+  /* ---------- theme ---------- */
+  const themeToggle = document.getElementById('theme-toggle');
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    themeToggle.textContent = t === 'dark' ? '🌙' : '☀️';
+  }
+  const savedTheme = localStorage.getItem('drumroll-theme');
+  if (savedTheme) applyTheme(savedTheme);
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const t = isDark ? 'light' : 'dark';
+    applyTheme(t);
+    localStorage.setItem('drumroll-theme', t);
+  });
+
+  /* ---------- state ---------- */
+  // items: [{ id, name, pickedAt: number|null }]
+  let items = [];
+  let nextId = 1;
+  const STORAGE_KEY = 'drumroll-state-v1';
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, nextId }));
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed.items)) {
+        items = parsed.items;
+        nextId = parsed.nextId || (items.reduce((m, i) => Math.max(m, i.id), 0) + 1);
+      }
+    } catch (e) {}
+  }
+  load();
+
+  /* ---------- DOM ---------- */
+  const addForm = document.getElementById('add-form');
+  const addInput = document.getElementById('add-input');
+  const itemsList = document.getElementById('items-list');
+  const counts = document.getElementById('counts');
+  const pickBtn = document.getElementById('pick-btn');
+  const resetBtn = document.getElementById('reset-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const pickDisplay = document.getElementById('pick-display');
+  const stageMeta = document.getElementById('stage-meta');
+  const stageEyebrow = document.getElementById('stage-eyebrow');
+  const confettiEl = document.getElementById('confetti');
+  const sparklesEl = document.getElementById('sparkles');
+  const stageEl = document.getElementById('stage');
+
+  let isRolling = false;
+  let activeSources = [];
+
+  function render() {
+    itemsList.innerHTML = '';
+    const remaining = items.filter(i => i.pickedAt == null);
+    const pickedList = items.filter(i => i.pickedAt != null).sort((a,b) => a.pickedAt - b.pickedAt);
+    // show remaining first (un-picked), then picked
+    const ordered = [...remaining, ...pickedList];
+    ordered.forEach((item, idx) => {
+      const li = document.createElement('li');
+      if (item.pickedAt != null) li.classList.add('picked');
+      const pickedIndex = pickedList.indexOf(item);
+      const orderNum = pickedIndex >= 0 ? `${pickedIndex + 1}.` : '';
+      li.innerHTML = `
+        <span class="order-num">${orderNum}</span>
+        <span class="name"></span>
+        <button class="remove" title="Remove">×</button>
+      `;
+      li.querySelector('.name').textContent = item.name;
+      li.querySelector('.remove').addEventListener('click', () => {
+        items = items.filter(i => i.id !== item.id);
+        save(); render();
+      });
+      itemsList.appendChild(li);
+    });
+    counts.textContent = `${remaining.length} in hat · ${pickedList.length} picked`;
+    pickBtn.disabled = isRolling || remaining.length === 0;
+    if (remaining.length === 0 && items.length > 0 && !isRolling) {
+      pickBtn.textContent = 'All picked';
+    } else if (!isRolling) {
+      pickBtn.textContent = '🥁 Pick next';
+    }
+  }
+
+  /* ---------- add / reset / clear ---------- */
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = addInput.value;
+    // allow comma- or newline-separated bulk add
+    const names = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+    if (names.length === 0) return;
+    names.forEach(name => items.push({ id: nextId++, name, pickedAt: null }));
+    addInput.value = '';
+    save(); render();
+    if (placeholderShowing()) setPlaceholder();
+  });
+  // also allow paste of multi-line content
+  addInput.addEventListener('paste', (e) => {
+    const text = (e.clipboardData || window.clipboardData).getData('text');
+    if (text && /[\n,]/.test(text)) {
+      e.preventDefault();
+      const names = text.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+      names.forEach(name => items.push({ id: nextId++, name, pickedAt: null }));
+      addInput.value = '';
+      save(); render();
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    items.forEach(i => i.pickedAt = null);
+    save(); render();
+    setPlaceholder();
+  });
+  clearBtn.addEventListener('click', () => {
+    if (items.length === 0) return;
+    if (!confirm('Remove all items?')) return;
+    items = [];
+    save(); render();
+    setPlaceholder();
+  });
+
+  function placeholderShowing() {
+    return pickDisplay.classList.contains('placeholder');
+  }
+  function setPlaceholder() {
+    pickDisplay.classList.remove('reveal', 'rolling', 'finale');
+    pickDisplay.classList.add('placeholder');
+    pickDisplay.textContent = items.length === 0
+      ? 'Add some items, then pick →'
+      : 'Ready when you are';
+    stageMeta.textContent = '';
+    stageEyebrow.textContent = 'Pick from the hat';
+    stageEyebrow.classList.remove('finale-eyebrow');
+    stageEl.classList.remove('finale-stage');
+    stopSparkles();
+  }
+
+  /* ---------- audio: synthesized drumroll ---------- */
+  let audioCtx = null;
+  let masterGain = null;
+  function getCtx() {
+    if (!audioCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new Ctx();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.9;
+      masterGain.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  // pre-baked noise buffer pool — re-used so we don't allocate per-hit
+  let noiseBuffer = null;
+  function getNoise(ctx) {
+    if (noiseBuffer && noiseBuffer.sampleRate === ctx.sampleRate) return noiseBuffer;
+    const len = Math.floor(ctx.sampleRate * 2);
+    noiseBuffer = ctx.createBuffer(1, len, ctx.sampleRate);
+    const d = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    return noiseBuffer;
+  }
+
+  function track(node) { activeSources.push(node); return node; }
+  function stopAll() {
+    activeSources.forEach(n => { try { n.stop(); } catch (e) {} });
+    activeSources = [];
+  }
+
+  // a single snare hit — body thump + bright crack + tail sizzle
+  function snareHit(when, gain) {
+    const ctx = getCtx();
+    const buf = getNoise(ctx);
+
+    // bright crack: high-passed noise, very short
+    const crack = ctx.createBufferSource();
+    crack.buffer = buf;
+    crack.playbackRate.value = 0.9 + Math.random() * 0.2;
+    crack.loop = false;
+    const crackOffset = Math.random() * (buf.duration - 0.1);
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 2500;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass'; bp.frequency.value = 5000; bp.Q.value = 0.6;
+    const crackG = ctx.createGain();
+    crackG.gain.setValueAtTime(0, when);
+    crackG.gain.linearRampToValueAtTime(gain * 0.55, when + 0.002);
+    crackG.gain.exponentialRampToValueAtTime(0.0001, when + 0.08);
+    crack.connect(hp).connect(bp).connect(crackG).connect(masterGain);
+    crack.start(when, crackOffset);
+    crack.stop(when + 0.1);
+    track(crack);
+
+    // mid body: bandpassed noise for the snare wires
+    const mid = ctx.createBufferSource();
+    mid.buffer = buf;
+    mid.playbackRate.value = 0.9 + Math.random() * 0.2;
+    const midOffset = Math.random() * (buf.duration - 0.1);
+    const midBp = ctx.createBiquadFilter();
+    midBp.type = 'bandpass'; midBp.frequency.value = 1200; midBp.Q.value = 0.8;
+    const midG = ctx.createGain();
+    midG.gain.setValueAtTime(0, when);
+    midG.gain.linearRampToValueAtTime(gain * 0.35, when + 0.003);
+    midG.gain.exponentialRampToValueAtTime(0.0001, when + 0.05);
+    mid.connect(midBp).connect(midG).connect(masterGain);
+    mid.start(when, midOffset);
+    mid.stop(when + 0.06);
+    track(mid);
+
+    // drum body thump (pitched)
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(220, when);
+    osc.frequency.exponentialRampToValueAtTime(110, when + 0.04);
+    const og = ctx.createGain();
+    og.gain.setValueAtTime(0, when);
+    og.gain.linearRampToValueAtTime(gain * 0.45, when + 0.002);
+    og.gain.exponentialRampToValueAtTime(0.0001, when + 0.05);
+    osc.connect(og).connect(masterGain);
+    osc.start(when);
+    osc.stop(when + 0.06);
+    track(osc);
+  }
+
+  // sustained "buzz" layer — continuous filtered noise under the discrete hits
+  function startBuzzLayer(start, duration) {
+    const ctx = getCtx();
+    const buf = getNoise(ctx);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass'; bp.frequency.value = 1800; bp.Q.value = 0.5;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(0.06, start + 0.15);
+    g.gain.linearRampToValueAtTime(0.18, start + duration * 0.85);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    src.connect(bp).connect(g).connect(masterGain);
+    src.start(start);
+    src.stop(start + duration + 0.05);
+    track(src);
+  }
+
+  // tom rim shot — big single hit at the end
+  function rimShot(when, big) {
+    const ctx = getCtx();
+    const buf = getNoise(ctx);
+    const amp = big ? 1.0 : 0.7;
+
+    // noise burst (snare wires snapping)
+    const n = ctx.createBufferSource();
+    n.buffer = buf;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 1800;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0, when);
+    ng.gain.linearRampToValueAtTime(amp * 0.55, when + 0.003);
+    ng.gain.exponentialRampToValueAtTime(0.0001, when + 0.25);
+    n.connect(hp).connect(ng).connect(masterGain);
+    n.start(when);
+    n.stop(when + 0.3);
+    track(n);
+
+    // pitched body
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(260, when);
+    osc.frequency.exponentialRampToValueAtTime(70, when + 0.12);
+    const og = ctx.createGain();
+    og.gain.setValueAtTime(0, when);
+    og.gain.linearRampToValueAtTime(amp * 0.7, when + 0.003);
+    og.gain.exponentialRampToValueAtTime(0.0001, when + 0.18);
+    osc.connect(og).connect(masterGain);
+    osc.start(when);
+    osc.stop(when + 0.2);
+    track(osc);
+  }
+
+  // big cymbal crash on reveal
+  function crashHit(when, big) {
+    const ctx = getCtx();
+    const buf = getNoise(ctx);
+    const dur = big ? 2.2 : 1.4;
+    const amp = big ? 0.5 : 0.32;
+
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 3500;
+    const peak = ctx.createBiquadFilter();
+    peak.type = 'peaking'; peak.frequency.value = 7500; peak.Q.value = 1.2; peak.gain.value = 6;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, when);
+    g.gain.linearRampToValueAtTime(amp, when + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    src.connect(hp).connect(peak).connect(g).connect(masterGain);
+    src.start(when);
+    src.stop(when + dur + 0.05);
+    track(src);
+
+    // low boom
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(140, when);
+    osc.frequency.exponentialRampToValueAtTime(45, when + 0.4);
+    const og = ctx.createGain();
+    og.gain.setValueAtTime(0, when);
+    og.gain.linearRampToValueAtTime(amp * 1.4, when + 0.005);
+    og.gain.exponentialRampToValueAtTime(0.0001, when + 0.6);
+    osc.connect(og).connect(masterGain);
+    osc.start(when);
+    osc.stop(when + 0.7);
+    track(osc);
+  }
+
+  // brass-fanfare "ta-da" for the finale
+  function fanfare(when) {
+    const ctx = getCtx();
+    // a major chord: C5 E5 G5 -> rise to C6 E6 G6
+    const notes = [523.25, 659.25, 783.99];
+    notes.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc2.type = 'square';
+      osc.frequency.setValueAtTime(f, when);
+      osc2.frequency.setValueAtTime(f, when);
+      osc2.detune.value = 6;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass'; filter.frequency.value = 2400; filter.Q.value = 1.2;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, when);
+      g.gain.linearRampToValueAtTime(0.10, when + 0.04);
+      g.gain.linearRampToValueAtTime(0.07, when + 0.5);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + 1.8);
+      osc.connect(filter); osc2.connect(filter);
+      filter.connect(g).connect(masterGain);
+      osc.start(when); osc2.start(when);
+      osc.stop(when + 1.85); osc2.stop(when + 1.85);
+      track(osc); track(osc2);
+    });
+  }
+
+  // schedule a roll over `totalDuration` seconds, accelerating
+  function scheduleDrumroll(totalDuration, isFinale) {
+    const ctx = getCtx();
+    const t0 = ctx.currentTime + 0.02;
+    const end = t0 + totalDuration;
+
+    startBuzzLayer(t0, totalDuration);
+
+    let t = t0;
+    const rateStart = 14;
+    const ratePeak = isFinale ? 36 : 30;
+    while (t < end) {
+      const p = (t - t0) / totalDuration;
+      const rate = rateStart + (ratePeak - rateStart) * Math.pow(p, 0.6);
+      const gain = 0.18 + 0.32 * Math.pow(p, 1.3);
+      // alternate slight stereo-like volume jitter to feel hand-played
+      const jitter = 0.85 + Math.random() * 0.3;
+      snareHit(t, gain * jitter);
+      t += 1 / rate;
+    }
+
+    // climactic accent + crash
+    rimShot(end + 0.04, isFinale);
+    crashHit(end + 0.05, isFinale);
+    if (isFinale) {
+      fanfare(end + 0.18);
+    }
+  }
+
+  /* ---------- picking ---------- */
+  const ROLL_DURATION_MS = 2400;
+  const FINALE_DURATION_MS = 4200;
+
+  function fireConfetti(big) {
+    const palette = big
+      ? ['#f3c969', '#fff4cf', '#c9a24a', '#e8b85c', '#f9d97a', '#b88a2f']
+      : ['#5ac47a', '#f3c969', '#e88c7d', '#9eb7e5', '#c3a6df', '#7dc7b6'];
+    const n = big ? 110 : 36;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.background = palette[i % palette.length];
+      const dur = big ? (2.0 + Math.random() * 1.8) : (1.4 + Math.random() * 1.4);
+      s.style.animationDuration = dur + 's';
+      s.style.animationDelay = (Math.random() * (big ? 0.6 : 0.2)) + 's';
+      if (big) {
+        s.style.width = (6 + Math.random() * 6) + 'px';
+        s.style.height = (10 + Math.random() * 8) + 'px';
+      }
+      s.style.transform = `rotate(${Math.random()*360}deg)`;
+      confettiEl.appendChild(s);
+      setTimeout(() => s.remove(), (dur + 0.8) * 1000);
+    }
+  }
+
+  function startSparkles() {
+    stopSparkles();
+    for (let i = 0; i < 14; i++) {
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = (10 + Math.random() * 80) + '%';
+      s.style.animationDelay = (Math.random() * 1.8) + 's';
+      s.style.animationDuration = (1.4 + Math.random() * 1.2) + 's';
+      sparklesEl.appendChild(s);
+    }
+  }
+  function stopSparkles() {
+    sparklesEl.innerHTML = '';
+  }
+
+  function clearFinaleStyling() {
+    pickDisplay.classList.remove('finale');
+    stageEl.classList.remove('finale-stage');
+    stageEyebrow.classList.remove('finale-eyebrow');
+    stopSparkles();
+  }
+
+  pickBtn.addEventListener('click', () => {
+    if (isRolling) return;
+    const remaining = items.filter(i => i.pickedAt == null);
+    if (remaining.length === 0) return;
+
+    const isFinale = remaining.length === 1 && items.length > 1;
+    const rollMs = isFinale ? FINALE_DURATION_MS : ROLL_DURATION_MS;
+
+    isRolling = true;
+    pickBtn.disabled = true;
+    pickBtn.textContent = 'Rolling…';
+    clearFinaleStyling();
+    if (isFinale) {
+      stageEyebrow.classList.add('finale-eyebrow');
+      stageEyebrow.textContent = 'And last but not least…';
+      stageMeta.textContent = '';
+    } else {
+      stageEyebrow.textContent = 'Drumroll please';
+    }
+
+    try { scheduleDrumroll(rollMs / 1000, isFinale); } catch (e) {}
+
+    // visual: shuffle through names rapidly. In finale there's only one,
+    // so shuffle through the full original list for show.
+    const shufflePool = isFinale ? items.map(i => i.name) : remaining.map(i => i.name);
+    pickDisplay.classList.remove('placeholder', 'reveal', 'finale');
+    pickDisplay.classList.add('rolling');
+    let elapsed = 0;
+    const step = () => {
+      const idx = Math.floor(Math.random() * shufflePool.length);
+      pickDisplay.textContent = shufflePool[idx];
+      elapsed += 90;
+      if (elapsed < rollMs - 120) {
+        const p = elapsed / rollMs;
+        // accelerate towards the end then slow ever so slightly
+        const delay = 55 + (1 - p) * 80;
+        setTimeout(step, delay);
+      }
+    };
+    step();
+
+    // final pick
+    setTimeout(() => {
+      const stillRemaining = items.filter(i => i.pickedAt == null);
+      const winner = stillRemaining[Math.floor(Math.random() * stillRemaining.length)];
+      winner.pickedAt = Date.now();
+      pickDisplay.classList.remove('rolling');
+      pickDisplay.textContent = winner.name;
+      pickDisplay.classList.remove('reveal');
+      void pickDisplay.offsetWidth;
+      pickDisplay.classList.add('reveal');
+
+      const pickedCount = items.filter(i => i.pickedAt != null).length;
+      const total = items.length;
+
+      if (isFinale) {
+        pickDisplay.classList.add('finale');
+        stageEl.classList.add('finale-stage');
+        stageEyebrow.classList.add('finale-eyebrow');
+        stageEyebrow.textContent = '…last but not least';
+        stageMeta.textContent = "That's everyone.";
+        startSparkles();
+        fireConfetti(true);
+      } else {
+        stageEyebrow.classList.remove('finale-eyebrow');
+        stageEyebrow.textContent = `Pick ${pickedCount} of ${total}`;
+        stageMeta.textContent = `${total - pickedCount} still in the hat`;
+        fireConfetti(false);
+      }
+
+      save(); render();
+      isRolling = false;
+      pickBtn.disabled = items.filter(i => i.pickedAt == null).length === 0;
+      pickBtn.textContent = pickBtn.disabled ? 'All picked' : '🥁 Pick next';
+    }, rollMs);
+  });
+
+  // initial render
+  if (items.length === 0) {
+    setPlaceholder();
+  } else {
+    const picked = items.filter(i => i.pickedAt != null);
+    if (picked.length === 0) {
+      setPlaceholder();
+    } else {
+      const last = picked.sort((a,b) => b.pickedAt - a.pickedAt)[0];
+      pickDisplay.classList.remove('placeholder');
+      pickDisplay.textContent = last.name;
+      stageEyebrow.textContent = `Pick ${picked.length} of ${items.length}`;
+      const left = items.length - picked.length;
+      stageMeta.textContent = left === 0 ? "That's everyone." : `${left} still in the hat`;
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
