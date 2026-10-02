@@ -11,8 +11,7 @@ Drumroll is a single-file vanilla HTML/CSS/JS app — a no-replacement random pi
 ```
 public/index.html    The whole app — HTML + CSS in <style> + JS in <script>
 public/favicon.svg   Snare-drum SVG favicon
-firebase.json        Firebase Hosting config
-.firebaserc          Points at the original Firebase project (you can't deploy there)
+.github/workflows/pages.yml   Deploys public/ to GitHub Pages on every push to main
 README.md            Human onboarding, including team workflow
 AGENTS.md            This file
 ```
@@ -57,7 +56,7 @@ There are no automated tests. **You must manually verify in the browser** after 
 
 ## Out of scope without asking
 
-- Changing the Firebase project, `firebase.json`, or `.firebaserc`
+- Changing the hosting setup: `.github/workflows/pages.yml`, the Pages settings, or the `drumroll.dej.app` custom domain
 - Adding any dependency, package manager, or build tool
 - Switching to a framework
 - Splitting `public/index.html` into multiple files

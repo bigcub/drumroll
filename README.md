@@ -4,7 +4,7 @@ A no-replacement random picker for meetings. Add a list of names or items, then 
 
 Built in plain HTML/CSS/JS with the [Meadow](https://daymeadow.com) design language. Audio is synthesized live via the Web Audio API — no sound assets to host.
 
-Live at <https://drumroll-app-3415.web.app>.
+Live at <https://drumroll.dej.app>.
 
 ## Run locally
 
@@ -75,10 +75,12 @@ A few habits that make agents much more useful:
 
 ### Deploying
 
-You **can't** deploy to <https://drumroll-app-3415.web.app> — that's the original project and only David has access. To see your changes live:
+The site is hosted on GitHub Pages. Every merge to `main` deploys `public/` to <https://drumroll.dej.app> automatically (see `.github/workflows/pages.yml`). There's no manual deploy step — merging the PR *is* shipping it.
+
+To see your changes live before they're merged:
 
 - **Easiest:** open the PR. The reviewer can preview locally.
-- **Your own Firebase project:** run `firebase use --add`, pick a project of your own, then `firebase deploy --only hosting`. Your version will live at `https://<your-project-id>.web.app`. (The `.firebaserc` in this repo points at the original project — Firebase will refuse your deploy with a permission error until you switch.)
+- **Your own fork:** fork the repo, then in your fork go to **Settings → Pages** and set the source to **GitHub Actions**. Pushes to your fork's `main` will deploy to `https://<your-username>.github.io/drumroll/`.
 
 ### Ideas for things to add
 
